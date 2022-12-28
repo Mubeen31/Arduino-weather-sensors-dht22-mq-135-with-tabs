@@ -219,6 +219,4 @@ def update_value(n_intervals):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=False,
-                   host='0.0.0.0', port=8080
-                   )
+    app.run_server(debug=True)
