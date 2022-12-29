@@ -11,7 +11,7 @@ from app import app
 layout_tab_three = html.Div([
 
     dcc.Interval(id='update_value3',
-                 interval=1 * 4000,
+                 interval=1 * 11000,
                  n_intervals=0),
 
     html.Div([
