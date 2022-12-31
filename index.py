@@ -9,8 +9,6 @@ from tabsContent.tab_two import layout_tab_two
 from tabsContent.tab_three import layout_tab_three
 from app import app
 
-server = app.server
-
 tab_style = {
     'border-top': '1px solid #ffffff',
     'border-left': '1px solid #ffffff',
