@@ -25,12 +25,12 @@ layout_tab_three = html.Div([
 @app.callback(Output('line_chart3', 'figure'),
               [Input('update_value3', 'n_intervals')])
 def line_chart_values(n_intervals):
-    if n_intervals == 0:
-        raise PreventUpdate
-    else:
-        credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
-        project_id = 'weatherdata1'
-        df_sql = f"""SELECT
+    # if n_intervals == 0:
+    #     raise PreventUpdate
+    # else:
+    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+    project_id = 'weatherdata1'
+    df_sql = f"""SELECT
                      DateTime,
                      OutsideTemperature
                      FROM
@@ -38,14 +38,14 @@ def line_chart_values(n_intervals):
                      ORDER BY
                      DateTime ASC
                      """
-        df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
-        df['DateTime'] = pd.to_datetime(df['DateTime'])
-        df['Date'] = df['DateTime'].dt.date
-        df['Date'] = pd.to_datetime(df['Date'])
-        df['Hour'] = pd.to_datetime(df['DateTime']).dt.hour
-        unique_date = df['Date'].unique()
-        filter_today_date = df[df['Date'] == unique_date[-1]][['Date', 'Hour', 'OutsideTemperature']]
-        today_hourly_values = filter_today_date.groupby(['Date', 'Hour'])['OutsideTemperature'].mean().reset_index()
+    df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
+    df['DateTime'] = pd.to_datetime(df['DateTime'])
+    df['Date'] = df['DateTime'].dt.date
+    df['Date'] = pd.to_datetime(df['Date'])
+    df['Hour'] = pd.to_datetime(df['DateTime']).dt.hour
+    unique_date = df['Date'].unique()
+    filter_today_date = df[df['Date'] == unique_date[-1]][['Date', 'Hour', 'OutsideTemperature']]
+    today_hourly_values = filter_today_date.groupby(['Date', 'Hour'])['OutsideTemperature'].mean().reset_index()
 
     return {
         'data': [go.Bar(

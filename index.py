@@ -8,6 +8,7 @@ from tabsContent.tab_one import layout_tab_one
 from tabsContent.tab_two import layout_tab_two
 from tabsContent.tab_three import layout_tab_three
 from app import app
+
 server = app.server
 
 tab_style = {
@@ -114,20 +115,20 @@ def render_content(value):
 @app.callback(Output('value1', 'children'),
               [Input('update_value', 'n_intervals')])
 def update_value(n_intervals):
-    if n_intervals == 0:
-        raise PreventUpdate
-    else:
-        credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
-        project_id = 'weatherdata1'
-        df_sql = f"""SELECT
+    # if n_intervals == 0:
+    #     raise PreventUpdate
+    # else:
+    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+    project_id = 'weatherdata1'
+    df_sql = f"""SELECT
                  OutsideTemperature
                  FROM
                  `weatherdata1.WeatherSensorsData1.SensorsData1`
                  ORDER BY
                  DateTime DESC LIMIT 1
                  """
-        df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
-        get_temp = df['OutsideTemperature'].head(1).iloc[0]
+    df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
+    get_temp = df['OutsideTemperature'].head(1).iloc[0]
 
     return [
         html.Div([
@@ -150,20 +151,20 @@ def update_value(n_intervals):
 @app.callback(Output('value2', 'children'),
               [Input('update_value', 'n_intervals')])
 def update_value(n_intervals):
-    if n_intervals == 0:
-        raise PreventUpdate
-    else:
-        credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
-        project_id = 'weatherdata1'
-        df_sql = f"""SELECT
+    # if n_intervals == 0:
+    #     raise PreventUpdate
+    # else:
+    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+    project_id = 'weatherdata1'
+    df_sql = f"""SELECT
                  OutsideHumidity
                  FROM
                  `weatherdata1.WeatherSensorsData1.SensorsData1`
                  ORDER BY
                  DateTime DESC LIMIT 1
                  """
-        df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
-        get_humidity = df['OutsideHumidity'].head(1).iloc[0]
+    df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
+    get_humidity = df['OutsideHumidity'].head(1).iloc[0]
 
     return [
         html.Div([
@@ -186,20 +187,20 @@ def update_value(n_intervals):
 @app.callback(Output('value3', 'children'),
               [Input('update_value', 'n_intervals')])
 def update_value(n_intervals):
-    if n_intervals == 0:
-        raise PreventUpdate
-    else:
-        credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
-        project_id = 'weatherdata1'
-        df_sql = f"""SELECT
+    # if n_intervals == 0:
+    #     raise PreventUpdate
+    # else:
+    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+    project_id = 'weatherdata1'
+    df_sql = f"""SELECT
                  OutsideCO2
                  FROM
                  `weatherdata1.WeatherSensorsData1.SensorsData1`
                  ORDER BY
                  DateTime DESC LIMIT 1
                  """
-        df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
-        get_co2 = df['OutsideCO2'].head(1).iloc[0]
+    df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
+    get_co2 = df['OutsideCO2'].head(1).iloc[0]
 
     return [
         html.Div([

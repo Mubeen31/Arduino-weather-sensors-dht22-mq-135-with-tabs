@@ -1,3 +1,4 @@
+import pandas as pd
 from dash import html
 from dash import dcc
 from dash.dependencies import Input, Output
@@ -24,12 +25,12 @@ layout_tab_one = html.Div([
 @app.callback(Output('line_chart1', 'figure'),
               [Input('update_value1', 'n_intervals')])
 def line_chart_values(n_intervals):
-    if n_intervals == 0:
-        raise PreventUpdate
-    else:
-        credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
-        project_id = 'weatherdata1'
-        df_sql = f"""SELECT
+    # if n_intervals == 0:
+    #     raise PreventUpdate
+    # else:
+    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+    project_id = 'weatherdata1'
+    df_sql = f"""SELECT
                      DateTime,
                      OutsideTemperature
                      FROM
@@ -37,7 +38,7 @@ def line_chart_values(n_intervals):
                      ORDER BY
                      DateTime DESC LIMIT 30
                      """
-        df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
+    df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
 
     return {
         'data': [go.Scatter(
@@ -83,21 +84,22 @@ def line_chart_values(n_intervals):
 
                        ),
 
-            yaxis=dict(range=[min(df['OutsideTemperature'].head(30)) - 0.05, max(df['OutsideTemperature'].head(30)) + 0.05],
-                       title='<b>Temperature (°C)</b>',
-                       color='#ffffff',
-                       zeroline=False,
-                       showline=True,
-                       showgrid=False,
-                       linecolor='#ffffff',
-                       linewidth=1,
-                       ticks='outside',
-                       tickfont=dict(
-                           family='Arial',
-                           size=12,
-                           color='#ffffff')
+            yaxis=dict(
+                range=[min(df['OutsideTemperature'].head(30)) - 0.05, max(df['OutsideTemperature'].head(30)) + 0.05],
+                title='<b>Temperature (°C)</b>',
+                color='#ffffff',
+                zeroline=False,
+                showline=True,
+                showgrid=False,
+                linecolor='#ffffff',
+                linewidth=1,
+                ticks='outside',
+                tickfont=dict(
+                    family='Arial',
+                    size=12,
+                    color='#ffffff')
 
-                       ),
+                ),
             font=dict(
                 family="sans-serif",
                 size=12,
