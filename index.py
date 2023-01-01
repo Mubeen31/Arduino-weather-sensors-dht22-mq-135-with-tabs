@@ -8,6 +8,7 @@ from tabsContent.tab_one import layout_tab_one
 from tabsContent.tab_two import layout_tab_two
 from tabsContent.tab_three import layout_tab_three
 from app import app
+import dash_bootstrap_components as dbc
 
 tab_style = {
     'border-top': '1px solid #ffffff',
@@ -56,13 +57,22 @@ app.layout = html.Div([
 
     html.Div([
         html.Div([
-            html.Img(src=app.get_asset_url('sensor.png'),
-                     style={'height': '30px'},
-                     className='title_image'
-                     ),
-            html.Div('ARDUINO WEATHER SENSORS',
-                     className='title_text')
-        ], className='title_row')
+            html.Div([
+                html.Img(src=app.get_asset_url('sensor.png'),
+                         style={'height': '30px'},
+                         className='title_image'
+                         ),
+                html.Div('ARDUINO WEATHER SENSORS',
+                         className='title_text')
+            ], className='title_row'),
+
+            html.Div('Sensors Location: Walsall, England',
+                     className='location'),
+
+            dbc.Spinner(html.Div(id='date',
+                                 className='date_id'))
+        ], className='title_location_row')
+
     ], className='bg_title'),
 
     html.Div([
@@ -97,6 +107,31 @@ app.layout = html.Div([
 
     html.Div(id='return_tab_content', children=[])
 ])
+
+
+@app.callback(Output('date', 'children'),
+              [Input('update_value', 'n_intervals')])
+def update_confirmed(n_intervals):
+    # if n_intervals == 0:
+    #     raise PreventUpdate
+    # else:
+    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+    project_id = 'weatherdata1'
+    df_sql = f"""SELECT
+                     DateTime
+                     FROM
+                     `weatherdata1.WeatherSensorsData1.SensorsData1`
+                     ORDER BY
+                     DateTime DESC LIMIT 1
+                     """
+    df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
+    # df = pd.read_csv('data.csv')
+    get_date = df['DateTime'].head(1).iloc[0]
+
+    return [
+        html.Div('Last Date Update Time: ' + get_date,
+                 className='date_format')
+    ]
 
 
 @app.callback(Output('return_tab_content', 'children'),
