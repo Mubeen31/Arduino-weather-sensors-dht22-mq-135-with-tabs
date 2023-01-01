@@ -9,6 +9,7 @@ from tabsContent.tab_two import layout_tab_two
 from tabsContent.tab_three import layout_tab_three
 from app import app
 import dash_bootstrap_components as dbc
+server = app.server
 
 tab_style = {
     'border-top': '1px solid #ffffff',
