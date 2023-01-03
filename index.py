@@ -9,6 +9,8 @@ from tabsContent.tab_two import layout_tab_two
 from tabsContent.tab_three import layout_tab_three
 from app import app
 import dash_bootstrap_components as dbc
+import pandas as pd
+import csv
 server = app.server
 
 tab_style = {
@@ -113,21 +115,26 @@ app.layout = html.Div([
 @app.callback(Output('date', 'children'),
               [Input('update_value', 'n_intervals')])
 def update_confirmed(n_intervals):
-    # if n_intervals == 0:
-    #     raise PreventUpdate
-    # else:
     credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
     project_id = 'weatherdata1'
-    df_sql = f"""SELECT
-                     DateTime
-                     FROM
-                     `weatherdata1.WeatherSensorsData1.SensorsData1`
-                     ORDER BY
-                     DateTime DESC LIMIT 1
-                     """
+    df_sql = f"""SELECT *
+                         FROM
+                         `weatherdata1.WeatherSensorsData1.SensorsData1`
+                         ORDER BY
+                         DateTime DESC LIMIT 1
+                         """
     df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
-    # df = pd.read_csv('data.csv')
-    get_date = df['DateTime'].head(1).iloc[0]
+    df1 = df.tail(1)
+    df2 = df1.values.tolist()[0]
+    with open('data1.csv', 'a', newline='\n') as f:
+        writer = csv.writer(f, delimiter=',')
+        writer.writerow(df2)
+
+    header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
+              'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
+    df3 = pd.read_csv('data1.csv', names=header)
+    df3.drop_duplicates(keep=False, inplace=True)
+    get_date = df3['DateTime'].tail(1).iloc[0]
 
     return [
         html.Div('Last Date Update Time: ' + get_date,
@@ -149,20 +156,11 @@ def render_content(value):
 @app.callback(Output('value1', 'children'),
               [Input('update_value', 'n_intervals')])
 def update_value(n_intervals):
-    # if n_intervals == 0:
-    #     raise PreventUpdate
-    # else:
-    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
-    project_id = 'weatherdata1'
-    df_sql = f"""SELECT
-                 OutsideTemperature
-                 FROM
-                 `weatherdata1.WeatherSensorsData1.SensorsData1`
-                 ORDER BY
-                 DateTime DESC LIMIT 1
-                 """
-    df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
-    get_temp = df['OutsideTemperature'].head(1).iloc[0]
+    header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
+              'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
+    df3 = pd.read_csv('data1.csv', names=header)
+    df3.drop_duplicates(keep=False, inplace=True)
+    get_temp = df3['OutsideTemperature'].tail(1).iloc[0]
 
     return [
         html.Div([
@@ -185,20 +183,11 @@ def update_value(n_intervals):
 @app.callback(Output('value2', 'children'),
               [Input('update_value', 'n_intervals')])
 def update_value(n_intervals):
-    # if n_intervals == 0:
-    #     raise PreventUpdate
-    # else:
-    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
-    project_id = 'weatherdata1'
-    df_sql = f"""SELECT
-                 OutsideHumidity
-                 FROM
-                 `weatherdata1.WeatherSensorsData1.SensorsData1`
-                 ORDER BY
-                 DateTime DESC LIMIT 1
-                 """
-    df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
-    get_humidity = df['OutsideHumidity'].head(1).iloc[0]
+    header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
+              'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
+    df3 = pd.read_csv('data1.csv', names=header)
+    df3.drop_duplicates(keep=False, inplace=True)
+    get_humidity = df3['OutsideHumidity'].tail(1).iloc[0]
 
     return [
         html.Div([
@@ -221,20 +210,11 @@ def update_value(n_intervals):
 @app.callback(Output('value3', 'children'),
               [Input('update_value', 'n_intervals')])
 def update_value(n_intervals):
-    # if n_intervals == 0:
-    #     raise PreventUpdate
-    # else:
-    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
-    project_id = 'weatherdata1'
-    df_sql = f"""SELECT
-                 OutsideCO2
-                 FROM
-                 `weatherdata1.WeatherSensorsData1.SensorsData1`
-                 ORDER BY
-                 DateTime DESC LIMIT 1
-                 """
-    df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
-    get_co2 = df['OutsideCO2'].head(1).iloc[0]
+    header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
+              'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
+    df3 = pd.read_csv('data1.csv', names=header)
+    df3.drop_duplicates(keep=False, inplace=True)
+    get_co2 = df3['OutsideCO2'].tail(1).iloc[0]
 
     return [
         html.Div([
