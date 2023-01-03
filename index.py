@@ -11,6 +11,7 @@ from app import app
 import dash_bootstrap_components as dbc
 import pandas as pd
 import csv
+
 server = app.server
 
 tab_style = {
@@ -56,6 +57,10 @@ app.layout = html.Div([
 
     dcc.Interval(id='update_value',
                  interval=1 * 11000,
+                 n_intervals=0),
+
+    dcc.Interval(id='update_value5',
+                 interval=1 * 5000,
                  n_intervals=0),
 
     html.Div([
@@ -154,7 +159,7 @@ def render_content(value):
 
 
 @app.callback(Output('value1', 'children'),
-              [Input('update_value', 'n_intervals')])
+              [Input('update_value5', 'n_intervals')])
 def update_value(n_intervals):
     header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
@@ -181,7 +186,7 @@ def update_value(n_intervals):
 
 
 @app.callback(Output('value2', 'children'),
-              [Input('update_value', 'n_intervals')])
+              [Input('update_value5', 'n_intervals')])
 def update_value(n_intervals):
     header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
@@ -208,7 +213,7 @@ def update_value(n_intervals):
 
 
 @app.callback(Output('value3', 'children'),
-              [Input('update_value', 'n_intervals')])
+              [Input('update_value5', 'n_intervals')])
 def update_value(n_intervals):
     header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
               'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
