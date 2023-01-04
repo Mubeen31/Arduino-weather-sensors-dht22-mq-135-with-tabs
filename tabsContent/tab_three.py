@@ -42,10 +42,14 @@ def line_chart_values(n_intervals):
     filter_today_date = df[df['Date'] == unique_date[-1]][['Date', 'Hour', 'OutsideTemperature']]
     today_hourly_values = filter_today_date.groupby(['Date', 'Hour'])['OutsideTemperature'].mean().reset_index()
 
+    filter_yesterday_date = df[df['Date'] == unique_date[-2]][['Date', 'Hour', 'OutsideTemperature']]
+    yesterday_hourly_values = filter_yesterday_date.groupby(['Date', 'Hour'])['OutsideTemperature'].mean().reset_index()
+
     return {
         'data': [go.Bar(
             x=today_hourly_values['Hour'],
             y=today_hourly_values['OutsideTemperature'],
+            name='Today Average Temperature (°C)',
             text=today_hourly_values['OutsideTemperature'],
             texttemplate='%{text:.0f}°C',
             textposition='outside',
@@ -56,7 +60,23 @@ def line_chart_values(n_intervals):
             '<b>Date</b>: ' + today_hourly_values['Date'].astype(str) + '<br>' +
             '<b>Hour</b>: ' + today_hourly_values['Hour'].astype(str) + '<br>' +
             '<b>Temperature (°C)</b>: ' + [f'{x:,.2f} °C' for x in today_hourly_values['OutsideTemperature']] + '<br>'
-        )],
+        ),
+            go.Scatter(
+                x=yesterday_hourly_values['Hour'],
+                y=yesterday_hourly_values['OutsideTemperature'],
+                name='Yesterday Average Temperature (°C)',
+                mode='markers+lines',
+                line=dict(width=3, color='#CA23D5'),
+                marker=dict(size=7, symbol='circle', color='#CA23D5',
+                            line=dict(color='#CA23D5', width=2)
+                            ),
+                hoverinfo='text',
+                hovertext=
+                '<b>Date</b>: ' + yesterday_hourly_values['Date'].astype(str) + '<br>' +
+                '<b>Hour</b>: ' + yesterday_hourly_values['Hour'].astype(str) + '<br>' +
+                '<b>Temperature (°C)</b>: ' + [f'{x:,.2f} °C' for x in
+                                               yesterday_hourly_values['OutsideTemperature']] + '<br>'
+            )],
 
         'layout': go.Layout(
             plot_bgcolor='rgba(255, 255, 255, 0)',
@@ -104,6 +124,13 @@ def line_chart_values(n_intervals):
                     color='#ffffff')
 
             ),
+            legend={
+                'orientation': 'h',
+                'bgcolor': 'rgba(255, 255, 255, 0)',
+                'x': 0.5,
+                'y': -0.3,
+                'xanchor': 'center',
+                'yanchor': 'bottom'},
             font=dict(
                 family="sans-serif",
                 size=12,
