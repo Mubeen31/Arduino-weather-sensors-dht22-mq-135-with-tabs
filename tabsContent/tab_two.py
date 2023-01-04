@@ -11,7 +11,7 @@ from app import app
 layout_tab_two = html.Div([
 
     dcc.Interval(id='update_value2',
-                 interval=1 * 5000,
+                 interval=1 * 11000,
                  n_intervals=0),
 
     html.Div([
@@ -25,10 +25,15 @@ layout_tab_two = html.Div([
 @app.callback(Output('line_chart2', 'figure'),
               [Input('update_value2', 'n_intervals')])
 def line_chart_values(n_intervals):
-    header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
-              'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
-    df = pd.read_csv('data1.csv', names=header)
-    df.drop_duplicates(keep=False, inplace=True)
+    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+    project_id = 'weatherdata1'
+    df_sql = f"""SELECT DateTime, OutsideTemperature
+                                     FROM
+                                     `weatherdata1.WeatherSensorsData1.SensorsData1`
+                                     ORDER BY
+                                     DateTime ASC
+                                     """
+    df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
     df['DateTime'] = pd.to_datetime(df['DateTime'])
     df['Date'] = df['DateTime'].dt.date
     df['Date'] = pd.to_datetime(df['Date'])

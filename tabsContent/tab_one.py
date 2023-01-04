@@ -11,7 +11,7 @@ from app import app
 layout_tab_one = html.Div([
 
     dcc.Interval(id='update_value1',
-                 interval=1 * 5000,
+                 interval=1 * 11000,
                  n_intervals=0),
 
     html.Div([
@@ -25,15 +25,20 @@ layout_tab_one = html.Div([
 @app.callback(Output('line_chart1', 'figure'),
               [Input('update_value1', 'n_intervals')])
 def line_chart_values(n_intervals):
-    header = ['DateTime', 'InsideHumidity', 'InsideTemperature', 'InsideCO2',
-              'OutsideHumidity', 'OutsideTemperature', 'OutsideCO2']
-    df = pd.read_csv('data1.csv', names=header)
-    df.drop_duplicates(keep=False, inplace=True)
+    credentials = service_account.Credentials.from_service_account_file('weatherdata1.json')
+    project_id = 'weatherdata1'
+    df_sql = f"""SELECT DateTime, OutsideTemperature
+                                 FROM
+                                 `weatherdata1.WeatherSensorsData1.SensorsData1`
+                                 ORDER BY
+                                 DateTime DESC LIMIT 30
+                                 """
+    df = pd1.read_gbq(df_sql, project_id=project_id, dialect='standard', credentials=credentials)
 
     return {
         'data': [go.Scatter(
-            x=df['DateTime'].tail(30),
-            y=df['OutsideTemperature'].tail(30),
+            x=df['DateTime'].head(30),
+            y=df['OutsideTemperature'].head(30),
             mode='markers+lines',
             line=dict(width=3, color='#ffbf00'),
             marker=dict(size=7, symbol='circle', color='#ffbf00',
@@ -41,8 +46,8 @@ def line_chart_values(n_intervals):
                         ),
             hoverinfo='text',
             hovertext=
-            '<b>Date Time</b>: ' + df['DateTime'].tail(30).astype(str) + '<br>' +
-            '<b>Temperature (°C)</b>: ' + [f'{x:,.2f} °C' for x in df['OutsideTemperature'].tail(30)] + '<br>'
+            '<b>Date Time</b>: ' + df['DateTime'].head(30).astype(str) + '<br>' +
+            '<b>Temperature (°C)</b>: ' + [f'{x:,.2f} °C' for x in df['OutsideTemperature'].head(30)] + '<br>'
         )],
 
         'layout': go.Layout(
@@ -59,7 +64,7 @@ def line_chart_values(n_intervals):
                 'size': 17},
             hovermode='x unified',
             margin=dict(t=50, r=40),
-            xaxis=dict(range=[min(df['DateTime'].tail(30)), max(df['DateTime'].tail(30))],
+            xaxis=dict(range=[min(df['DateTime'].head(30)), max(df['DateTime'].head(30))],
                        title='<b>Hours</b>',
                        color='#ffffff',
                        showline=True,
@@ -75,7 +80,7 @@ def line_chart_values(n_intervals):
                        ),
 
             yaxis=dict(
-                range=[min(df['OutsideTemperature'].tail(30)) - 0.05, max(df['OutsideTemperature'].tail(30)) + 0.05],
+                range=[min(df['OutsideTemperature'].head(30)) - 0.05, max(df['OutsideTemperature'].head(30)) + 0.05],
                 title='<b>Temperature (°C)</b>',
                 color='#ffffff',
                 zeroline=False,
