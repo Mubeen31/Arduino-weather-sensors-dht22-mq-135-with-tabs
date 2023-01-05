@@ -70,6 +70,7 @@ def line_chart_values(n_intervals):
                 marker=dict(size=7, symbol='circle', color='#CA23D5',
                             line=dict(color='#CA23D5', width=2)
                             ),
+
                 hoverinfo='text',
                 hovertext=
                 '<b>Date</b>: ' + yesterday_hourly_values['Date'].astype(str) + '<br>' +
@@ -134,7 +135,7 @@ def line_chart_values(n_intervals):
             font=dict(
                 family="sans-serif",
                 size=12,
-                color='#ffffff')
+                color='black')
 
         )
 
