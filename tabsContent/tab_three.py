@@ -50,14 +50,14 @@ def line_chart_values(n_intervals):
             x=today_hourly_values['Hour'],
             y=today_hourly_values['OutsideTemperature'],
             name='Today Average Temperature (°C)',
-            text=today_hourly_values['OutsideTemperature'],
-            texttemplate='%{text:.0f}°C',
-            textposition='outside',
+            # text=today_hourly_values['OutsideTemperature'],
+            # texttemplate='%{text:.0f}°C',
+            # textposition='outside',
             marker=dict(color='#ffbf00'
                         ),
             hoverinfo='text',
             hovertext=
-            '<b>Date</b>: ' + today_hourly_values['Date'].astype(str) + '<br>' +
+            '<b>Today</b>: ' + today_hourly_values['Date'].astype(str) + '<br>' +
             '<b>Hour</b>: ' + today_hourly_values['Hour'].astype(str) + '<br>' +
             '<b>Temperature (°C)</b>: ' + [f'{x:,.2f} °C' for x in today_hourly_values['OutsideTemperature']] + '<br>'
         ),
@@ -73,7 +73,7 @@ def line_chart_values(n_intervals):
 
                 hoverinfo='text',
                 hovertext=
-                '<b>Date</b>: ' + yesterday_hourly_values['Date'].astype(str) + '<br>' +
+                '<b>Yesterday</b>: ' + yesterday_hourly_values['Date'].astype(str) + '<br>' +
                 '<b>Hour</b>: ' + yesterday_hourly_values['Hour'].astype(str) + '<br>' +
                 '<b>Temperature (°C)</b>: ' + [f'{x:,.2f} °C' for x in
                                                yesterday_hourly_values['OutsideTemperature']] + '<br>'
@@ -83,7 +83,7 @@ def line_chart_values(n_intervals):
             plot_bgcolor='rgba(255, 255, 255, 0)',
             paper_bgcolor='rgba(255, 255, 255, 0)',
             title={
-                'text': '<b>Today Temperature (°C)</b>',
+                'text': '<b>Comparing Two Days Temperature (°C)</b>',
                 'y': 0.97,
                 'x': 0.5,
                 'xanchor': 'center',
@@ -91,7 +91,7 @@ def line_chart_values(n_intervals):
             titlefont={
                 'color': '#ffbf00',
                 'size': 17},
-            hovermode='x unified',
+            hovermode='x',
             margin=dict(t=50, r=40),
             xaxis=dict(
                 tick0=0,
@@ -135,7 +135,7 @@ def line_chart_values(n_intervals):
             font=dict(
                 family="sans-serif",
                 size=12,
-                color='black')
+                color='#ffffff')
 
         )
 
