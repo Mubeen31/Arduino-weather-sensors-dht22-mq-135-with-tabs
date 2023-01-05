@@ -92,7 +92,7 @@ app.layout = html.Div([
 
     html.Div([
         html.Div([
-            dcc.Tabs(id='tabs', value='tab_content_one', children=[
+            dcc.Tabs(id='tabs', value='tab_content_three', children=[
                 dcc.Tab(label='Real Time Data', value='tab_content_one',
                         style=tab_style,
                         selected_style=tab_selected_style
